@@ -8,8 +8,8 @@ import logging
 import torch
 from torch import cuda
 from torch.autograd import Variable
-# from example_module import RNNLM
-from model import RNNLM
+from example_module import RNNLM
+# from model import RNNLM
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s: %(message)s',
@@ -82,21 +82,20 @@ def main(options):
     logging.info("At {0}-th epoch.".format(epoch_i))
     # srange generates a lazy sequence of shuffled range
     for i, batch_i in enumerate(utils.rand.srange(len(batched_train_in))):
-      for _rep in range(100):
-        train_in_batch = Variable(batched_train_in[batch_i])  # of size (seq_len, batch_size)
-        train_out_batch = Variable(batched_train_out[batch_i])  # of size (seq_len, batch_size)
-        if use_cuda:
-          train_in_batch = train_in_batch.cuda()
-          train_out_batch = train_out_batch.cuda()
+      train_in_batch = Variable(batched_train_in[batch_i])  # of size (seq_len, batch_size)
+      train_out_batch = Variable(batched_train_out[batch_i])  # of size (seq_len, batch_size)
+      if use_cuda:
+        train_in_batch = train_in_batch.cuda()
+        train_out_batch = train_out_batch.cuda()
 
-        sys_out_batch = rnnlm(train_in_batch)  # (seq_len, batch_size, vocab_size) # TODO: substitute this with your module
-        sys_out_batch = sys_out_batch.view(-1, vocab_size)
-        train_out_batch = train_out_batch.view(-1)
-        loss = criterion(sys_out_batch, train_out_batch)
-        logging.debug("loss at batch {0}: {1}".format(i, loss.data[0]))
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+      sys_out_batch = rnnlm(train_in_batch)  # (seq_len, batch_size, vocab_size) # TODO: substitute this with your module
+      sys_out_batch = sys_out_batch.view(-1, vocab_size)
+      train_out_batch = train_out_batch.view(-1)
+      loss = criterion(sys_out_batch, train_out_batch)
+      logging.debug("loss at batch {0}: {1}".format(i, loss.data[0]))
+      optimizer.zero_grad()
+      loss.backward()
+      optimizer.step()
 
     # validation -- this is a crude esitmation because there might be some paddings at the end
     dev_loss = 0.0
