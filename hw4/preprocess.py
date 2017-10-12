@@ -16,7 +16,7 @@ parser.add_argument("--train_file", required=True,
 parser.add_argument("--dev_file", required=True,
                     help="Dev text file that needs to be preprocessed.")
 parser.add_argument("--data_file", required=True,
-                    help="Path to store the data file.")
+                    help="Path to store the binarized data file.")
 parser.add_argument("--min_count", default=5, type=int,
                     help="Count threshold for the token to not be considered as <unk>. (default=5)")
 parser.add_argument("--charniak", action="store_true", default=False,
