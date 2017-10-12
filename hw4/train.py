@@ -77,7 +77,7 @@ def main(options):
   optimizer = eval("torch.optim." + options.optimizer)(rnnlm.parameters(), options.learning_rate)
 
   # main training loop
-  last_dev_loss = float("inf")
+  last_dev_avg_loss = float("inf")
   for epoch_i in range(options.epochs):
     logging.info("At {0}-th epoch.".format(epoch_i))
     # srange generates a lazy sequence of shuffled range
@@ -114,10 +114,10 @@ def main(options):
     dev_avg_loss = dev_loss / len(batched_dev_in)
     logging.info("Average loss value per instance is {0} at the end of epoch {1}".format(dev_avg_loss.data[0], epoch_i))
 
-    if (last_dev_loss - dev_loss).data[0] < options.estop:
-      logging.info("Early stopping triggered with threshold {0} (previous dev loss: {1}, current: {2})".format(epoch_i, last_dev_loss, dev_loss))
+    if (last_dev_avg_loss - dev_avg_loss).data[0] < options.estop:
+      logging.info("Early stopping triggered with threshold {0} (previous dev loss: {1}, current: {2})".format(epoch_i, last_dev_avg_loss.data[0], dev_avg_loss.data[0]))
       break
-    last_dev_loss = dev_loss
+    last_dev_avg_loss = dev_avg_loss
 
 
 if __name__ == "__main__":

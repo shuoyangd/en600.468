@@ -55,9 +55,7 @@ Now, check out the [starter code](https://github.com/shuoyangd/en600.468) (note 
 
     pip install -r requirements.txt
 
-Then, download the preproceed data file [here](http://todo.org). Untar the data file first:
-
-    tar -zxvf hw4-data.tgz
+Then, download the preproceed data file [here](https://drive.google.com/open?id=0Bwx3D6Nc6za4R0pSc1V3QWQwQUk).
 
 > Note: Before we start to explain the starter code, if you don't know what is a tensor, take 30 seconds to acquaint yourself with the notion of tensors in PyTorch by reading the first few paragraphs of this [PyTorch document](http://pytorch.org/docs/0.2.0/tensors.html) as we'll be using this term pretty pervasively.
 

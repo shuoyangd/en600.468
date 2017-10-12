@@ -15,6 +15,8 @@ parser.add_argument("--train_file", required=True,
                     help="Training text file that needs to be preprocessed.")
 parser.add_argument("--dev_file", required=True,
                     help="Dev text file that needs to be preprocessed.")
+parser.add_argument("--test_file", required=True,
+                    help="Test text file that needs to be preprocessed.")
 parser.add_argument("--data_file", required=True,
                     help="Path to store the binarized data file.")
 parser.add_argument("--min_count", default=5, type=int,
@@ -74,7 +76,16 @@ def main(options):
     sent = torch.LongTensor(token_ids)
     dev_data.append(sent)
 
-  torch.save((train_data, dev_data, vocab), open(options.data_file, 'wb'), pickle_module=dill)
+  test_data = []
+  for line in open(options.dev_file):
+    tokens = line.split()
+    token_ids = []
+    for token in tokens:
+      token_ids.append(vocab.stoi[token])
+    sent = torch.LongTensor(token_ids)
+    test_data.append(sent)
+
+  torch.save((train_data, dev_data, test_data, vocab), open(options.data_file, 'wb'), pickle_module=dill)
 
 
 if __name__ == "__main__":
