@@ -62,7 +62,7 @@ Then, download the preproceed data file [here](https://drive.google.com/open?id=
 The preprocessing script will collect the tokens in the training data and form a vocabulary, it will then convert sentences in training set, dev set and test set into list of torch tensors, with each tensor holding the word indexes for once sentence. The vocabulary is an instance of vocabulary implementation in [torchtext](https://github.com/pytorch/text/blob/master/torchtext/vocab.py).
 Finally, it will dump a binarized version of the data as well as the vocabulary onto disk, to the path you specify with `--data_file` option. Run the preprocessing script on your data now, e.g.:
 
-    python preprocess.py --train_file data/train.txt --dev_file data/dev.txt --data_file data/hw4_data.bin
+    python preprocess.py --train_file data/train.txt --dev_file data/dev.txt --test_file data/test.txt --data_file data/hw4_data.bin
 
 Now `data/hw4_data.bin` contains a tuple `(train_data, dev_data, test_data, vocab)`. You can unpack this binary dump with the following python code:
     
@@ -196,13 +196,13 @@ You don't have to worry about how to make batched data -- the starter code has a
 ### Deliverables
 
 + **1.1 (Code)** Implement a uni-directional RNN language model (`RNNLM`) in `models.py` that scans the sentence from left to right. Your implementation should be able to take word index input of size `(sequence_length, batch_size)` and output `(sequence_length, batch_size, vocab_size)` representing probability distribution for each word input. Note that your implementation should be able to deal with arbitrary batch size. **You are not allowed to use anything in `torch.nn` packge other than `torch.nn.Modules`**.
-+ **1.2 (Writeup)** After you finished your implementation, run the training script to check your implementation. The program prints negative log probability on dev set after each epoch. As a sanity check, your negative log probability on dev set should reach below 4.2 upon convergence (~10 minutes on my laptop CPU) with the following command:
++ **1.2 (Writeup)** After you finished your implementation, run the training script to check your implementation. The program prints negative log probability on dev set after each epoch. As a sanity check, your negative log probability on dev set should reach around 6.0 after first epoch (~5 minutes on my laptop CPU) with the following command:
 
 ```
 python train.py --data_file hw4_data --optimizer Adam -lr 1e-2 --batch_size 128
 ```
 
-with word embedding size 32 and hidden dimension 16. Report your converged dev negative log probability at this setting. If you are curious, try a few other hyperparameter combinations and report result as well.
+with word embedding size 32 and hidden dimension 16. Report your **converged** dev negative log probability at this setting. If you are curious, try a few other hyperparameter combinations and report result as well.
 
 Part II: Bi-directional RNN Language Model
 ---------------
@@ -221,7 +221,7 @@ The way to model this probability distribution is to have two RNNs in the same n
 ### Deliverables
 
 + **2.1 (Code)** Implement a bi-directional RNN language model (`BiRNNLM`) in `models.py` that scans the sentence in both ways. Your implementation should be able to take word index input of size `(sequence_length, batch_size)` and output `(sequence_length, batch_size, vocab_size)` representing probability distribution for each word input. Note that your implementation should be able to deal with arbitrary batch size. **You are not allowed to use anything in `torch.nn` packge other than `torch.nn.Modules`**.
-+ **2.2 (Writeup)** Check your implementation as in deliverable 1.2. You should be able to reach ... TODO!
++ **2.2 (Writeup)** Check your implementation using the same setup as in deliverable 1.2 (the only caveat is that to maintain the same number of parameters for fair comparison, your hidden dimension for each RNN direction should be 8). You should be able to reach negative log probability of around 1.5 on dev set after first epoch. Again report your **converged** dev negative log probability at this setting. If you are curious, try a few other hyperparameter combinations and report result as well.
 
 PART III: Multi-word Cloze
 ---------------
@@ -242,7 +242,7 @@ Cloze has very clear pedagogical motivation in language learning, but to the bes
 
 ### Deliverables
 
-+ **3.1 (Code)** Fill in `eval.py` to load your bi-directional RNN language model and do the multi-word cloze task. Your input data has already been converted into binary format for you by `preprocess.py` (the test set). Your output should have filled words for each sentence in the corresponding line, with the words in the same sentence segmented by a single space (as the example in the beginning). Submit the output to the [leaderboard submission site](http://jhumt2017leaderboard.appspot.com). You should be able to beat the baseline in terms of model performance.
++ **3.1 (Code)** Write a script to load your bi-directional RNN language model and do the multi-word cloze task. Because batching is not a must for decoding step (due to small data scale) and no optimization is happening during decoding, you should be able to proceed without a starter code. Your input data has already been converted into binary format for you by `preprocess.py` (the test set). Your output should have filled words for each sentence in the corresponding line, with the words in the same sentence segmented by a single space (as the example in the beginning). Submit the output to the [leaderboard submission site](http://jhumt2017leaderboard.appspot.com). You should be able to beat the baseline in terms of model performance.
 + **3.2 (Code & Writeup)** Implement an improvement model and describe it in your writeup. Note that for this part you *can* use things in `torch.nn` package **except** for all recurrent and dropout layers. Submit your improved output to the [leaderboard submission site](http://jhumt2017leaderboard.appspot.com).
 
 Part IV: GPU

@@ -71,8 +71,12 @@ def main(options):
   for line in open(options.dev_file):
     tokens = line.split()
     token_ids = []
+    if not options.charniak:
+      token_ids.append(vocab.stoi["<s>"])
     for token in tokens:
       token_ids.append(vocab.stoi[token])
+    if not options.charniak:
+      token_ids.append(vocab.stoi["</s>"])
     sent = torch.LongTensor(token_ids)
     dev_data.append(sent)
 
@@ -80,8 +84,12 @@ def main(options):
   for line in open(options.dev_file):
     tokens = line.split()
     token_ids = []
+    if not options.charniak:
+      token_ids.append(vocab.stoi["<s>"])
     for token in tokens:
       token_ids.append(vocab.stoi[token])
+    if not options.charniak:
+      token_ids.append(vocab.stoi["</s>"])
     sent = torch.LongTensor(token_ids)
     test_data.append(sent)
 

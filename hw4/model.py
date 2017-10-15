@@ -11,3 +11,12 @@ class RNNLM(nn.Module):
   def forward(self, input_batch):
     pass
 
+
+# TODO: Your implementation goes here
+class BiRNNLM(nn.Module):
+  def __init__(self, vocab_size):
+    super(BiRNNLM, self).__init__()
+    pass
+
+  def forward(self, input_batch):
+    pass

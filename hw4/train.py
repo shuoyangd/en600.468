@@ -8,8 +8,8 @@ import logging
 import torch
 from torch import cuda
 from torch.autograd import Variable
-from example_module import RNNLM
-# from model import RNNLM
+# from example_module import RNNLM
+from model import RNNLM
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s: %(message)s',
@@ -54,16 +54,16 @@ def main(options):
   if options.gpuid:
     cuda.set_device(options.gpuid[0])
 
-  train, dev, vocab = torch.load(open(options.data_file, 'rb'), pickle_module=dill)
+  train, dev, test, vocab = torch.load(open(options.data_file, 'rb'), pickle_module=dill)
   train_in = get_lm_input(train)
   train_out = get_lm_output(train)
   dev_in = get_lm_input(dev)
   dev_out = get_lm_output(dev)
 
-  batched_train_in, _ = utils.tensor.advanced_batchize(train_in, options.batch_size, vocab.stoi["<pad>"])
-  batched_train_out, _ = utils.tensor.advanced_batchize(train_out, options.batch_size, vocab.stoi["<pad>"])
-  batched_dev_in, _ = utils.tensor.advanced_batchize(dev_in, options.batch_size, vocab.stoi["<pad>"])
-  batched_dev_out, _ = utils.tensor.advanced_batchize(dev_out, options.batch_size, vocab.stoi["<pad>"])
+  batched_train_in, batched_train_in_mask, _ = utils.tensor.advanced_batchize(train_in, options.batch_size, vocab.stoi["<pad>"])
+  batched_train_out, batched_train_out_mask, _ = utils.tensor.advanced_batchize(train_out, options.batch_size, vocab.stoi["<pad>"])
+  batched_dev_in, batched_dev_in_mask, _ = utils.tensor.advanced_batchize(dev_in, options.batch_size, vocab.stoi["<pad>"])
+  batched_dev_out, batched_dev_out_mask, _ = utils.tensor.advanced_batchize(dev_out, options.batch_size, vocab.stoi["<pad>"])
 
   vocab_size = len(vocab)
 
@@ -84,13 +84,22 @@ def main(options):
     for i, batch_i in enumerate(utils.rand.srange(len(batched_train_in))):
       train_in_batch = Variable(batched_train_in[batch_i])  # of size (seq_len, batch_size)
       train_out_batch = Variable(batched_train_out[batch_i])  # of size (seq_len, batch_size)
+      train_in_mask = Variable(batched_train_in_mask[batch_i])
+      train_out_mask = Variable(batched_train_out_mask[batch_i])
       if use_cuda:
         train_in_batch = train_in_batch.cuda()
         train_out_batch = train_out_batch.cuda()
+        train_in_mask = train_in_mask.cuda()
+        train_out_mask = train_out_mask.cuda()
 
       sys_out_batch = rnnlm(train_in_batch)  # (seq_len, batch_size, vocab_size) # TODO: substitute this with your module
+      train_in_mask = train_in_mask.view(-1)
+      train_in_mask = train_in_mask.unsqueeze(1).expand(len(train_in_mask), vocab_size)
+      train_out_mask = train_out_mask.view(-1)
       sys_out_batch = sys_out_batch.view(-1, vocab_size)
       train_out_batch = train_out_batch.view(-1)
+      sys_out_batch = sys_out_batch.masked_select(train_in_mask).view(-1, vocab_size)
+      train_out_batch = train_out_batch.masked_select(train_out_mask)
       loss = criterion(sys_out_batch, train_out_batch)
       logging.debug("loss at batch {0}: {1}".format(i, loss.data[0]))
       optimizer.zero_grad()
@@ -102,13 +111,22 @@ def main(options):
     for batch_i in range(len(batched_dev_in)):
       dev_in_batch = Variable(batched_dev_in[batch_i])
       dev_out_batch = Variable(batched_dev_out[batch_i])
+      dev_in_mask = Variable(batched_dev_in_mask[batch_i])
+      dev_out_mask = Variable(batched_dev_out_mask[batch_i])
       if use_cuda:
         dev_in_batch = dev_in_batch.cuda()
         dev_out_batch = dev_out_batch.cuda()
+        dev_in_mask = dev_in_mask.cuda()
+        dev_out_mask = dev_out_mask.cuda()
 
       sys_out_batch = rnnlm(dev_in_batch)
+      dev_in_mask = dev_in_mask.view(-1)
+      dev_in_mask = dev_in_mask.unsqueeze(1).expand(len(dev_in_mask), vocab_size)
+      dev_out_mask = dev_out_mask.view(-1)
       sys_out_batch = sys_out_batch.view(-1, vocab_size)
       dev_out_batch = dev_out_batch.view(-1)
+      sys_out_batch = sys_out_batch.masked_select(dev_in_mask).view(-1, vocab_size)
+      dev_out_batch = dev_out_batch.masked_select(dev_out_mask)
       loss = criterion(sys_out_batch, dev_out_batch)
       dev_loss += loss
     dev_avg_loss = dev_loss / len(batched_dev_in)
