@@ -87,10 +87,10 @@ You will run starter code `train.py` to train your model.
 The uni-directional RNN language model is described in [(Mikolov et al. 2010)](http://www.fit.vutbr.cz/research/groups/speech/publi/2010/mikolov_interspeech2010_IS100722.pdf). There are three parts in the model:
 
 + The word embedding layer, which is simply a lookup table that stores the vector representation for each word type in the training data, including the special token "<unk>" reserved for unknown words. The vector representations should be queried by word indexes.
-+ The simple recurrent layer, scans one token in the left-to-right order at each timestep and computes the hidden state of each timestep by $h_t = \sigma(W_x x_t + W_h h_{t - 1})$ (bias terms omitted).
++ The simple recurrent layer, scans one token in the left-to-right order at each timestep and computes the hidden state of each timestep by $$h_t = \sigma(W_x x_t + W_h h_{t - 1})$$ (bias terms omitted).
 + The output layer, which first performs an linear transformation on the hidden states of the recurrent layer into a vector that has the same size as the full vocabulary, and then applies [softmax function](https://en.wikipedia.org/wiki/Softmax_function) over this vector, and then a element-wise log. The resulting vector is the output of this network.
 
-The output of the network is essentially the probability distribution $p(w_i\mid w_1, w_2, \ldots, w_{i-1})$ in the log space. To train this network, we would like to maximize the log probability of the training corpus, which is the objective function (a.k.a. negative loss function, which is why we always minimize loss function instead of maximize them) of the training: $$\mathcal{R} = \prod_{i\in\mathcal{I}} log p(w_i\mid w_1, w_2, \ldots, w_{i-1})$$ where $\forall i \in \mathcal{I}$, $w_i$ is a token in the sentence. This loss function as well as the parameter updates are both already implemented for you in the starter code.
+The output of the network is essentially the probability distribution $$p(w_i\mid w_1, w_2, \ldots, w_{i-1})$$ in the log space. To train this network, we would like to maximize the log probability of the training corpus, which is the objective function (a.k.a. negative loss function, which is why we always minimize loss function instead of maximize them) of the training: $$\mathcal{R} = \prod_{i\in\mathcal{I}} log p(w_i\mid w_1, w_2, \ldots, w_{i-1})$$ where $$\forall i \in \mathcal{I}$$, $$w_i$$ is a token in the sentence. This loss function as well as the parameter updates are both already implemented for you in the starter code.
 
 For further detail of the model, either consult the [original paper](http://www.fit.vutbr.cz/research/groups/speech/publi/2010/mikolov_interspeech2010_IS100722.pdf), the [slides from class](http://todo.org), or section 4.4 of the [brand new NMT textbook](http://mt-class.org/jhu/assets/nmt-book.pdf). 
 
@@ -209,7 +209,7 @@ Part II: Bi-directional RNN Language Model
 
 ### The Model
 
-Recall a uni-directional RNN Language model outputs the $p(w_i\mid w_1, w_2, \ldots, w_{i-1})$ in the log space. However, for some tasks we would like to take advantage of both the preceding context and the following context to be able to predict a word (as in machine translation). Hence, people designed bi-directional RNN language model to solve the problem, where it outputs $p(w_i\mid w_1, w_2, \ldots, w_{i-1}, w_{i+1}, \ldots, w_n})$ instead.
+Recall a uni-directional RNN Language model outputs the $$p(w_i\mid w_1, w_2, \ldots, w_{i-1})$$ in the log space. However, for some tasks we would like to take advantage of both the preceding context and the following context to be able to predict a word (as in machine translation). Hence, people designed bi-directional RNN language model to solve the problem, where it outputs $$p(w_i\mid w_1, w_2, \ldots, w_{i-1}, w_{i+1}, \ldots, w_n)$$ instead.
 
 The way to model this probability distribution is to have two RNNs in the same network. One scanning sentence from left to right, the other from right to left. After scanning is completed for both RNNs, the respective hidden states for each token step are concatenated and passed onto the final output layer. So now, the concatenated hidden state for each token has both the forward (preceding) context and the backward (following) context. In summary, here is the new model architecture.
 
@@ -301,3 +301,4 @@ Ground Rules
    your classmates.
 *  The deadline for the leaderboard is 10-31-2017 at 11:59pm.
 
+*Credits: This assignment was mostly developed by [Shuoyang Ding](http://sding.org/). [Adi Renduchintala](https://arendu.github.io) contributed the idea of multi-word cloze and helped extensively with testing this homework.*
