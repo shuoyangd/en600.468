@@ -1,4 +1,5 @@
 import argparse
+import codecs 
 import dill
 import collections
 import logging
@@ -24,6 +25,8 @@ parser.add_argument("--min_count", default=5, type=int,
 parser.add_argument("--charniak", action="store_true", default=False,
                     help="If the original text is already in charniak format " +
                     "(having <s> </s> at the beginning and end), enable this option to suppress padding.")
+parser.add_argument("--vocab_size", default=None, type=int,
+                    help="Maximum vocabulary size.")
 
 UNK = "<unk>"
 PAD = "<pad>"
@@ -32,7 +35,7 @@ PAD = "<pad>"
 def main(options):
   # first pass: collect count
   token_cnt = collections.Counter()
-  for line in open(options.train_file):
+  for line in codecs.open(options.train_file, 'r', 'utf8'):
     tokens = line.split()
     for token in tokens:
       token_cnt[token] += 1
@@ -51,11 +54,12 @@ def main(options):
   for key in to_del:
     del token_cnt[key]
 
-  vocab = torchtext.vocab.Vocab(token_cnt)
+  vocab = torchtext.vocab.Vocab(token_cnt, max_size=options.vocab_size)
 
   # second pass: numberize
   train_data = []
-  for line in open(options.train_file):
+  for line in codecs.open(options.train_file, 'r', 'utf8'):
+  # for line in open(options.train_file):
     tokens = line.split()
     token_ids = []
     if not options.charniak:
@@ -68,7 +72,8 @@ def main(options):
     train_data.append(sent)
 
   dev_data = []
-  for line in open(options.dev_file):
+  for line in codecs.open(options.dev_file, 'r', 'utf8'):
+  # for line in open(options.dev_file):
     tokens = line.split()
     token_ids = []
     if not options.charniak:
@@ -81,7 +86,8 @@ def main(options):
     dev_data.append(sent)
 
   test_data = []
-  for line in open(options.dev_file):
+  for line in codecs.open(options.test_file, 'r', 'utf8'):
+  # for line in open(options.dev_file):
     tokens = line.split()
     token_ids = []
     if not options.charniak:
