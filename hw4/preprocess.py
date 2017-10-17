@@ -1,5 +1,5 @@
 import argparse
-import codecs 
+import codecs
 import dill
 import collections
 import logging
@@ -30,6 +30,7 @@ parser.add_argument("--vocab_size", default=None, type=int,
 
 UNK = "<unk>"
 PAD = "<pad>"
+BLK = "<blank>"
 
 
 def main(options):
@@ -54,12 +55,11 @@ def main(options):
   for key in to_del:
     del token_cnt[key]
 
-  vocab = torchtext.vocab.Vocab(token_cnt, max_size=options.vocab_size)
+  vocab = torchtext.vocab.Vocab(token_cnt, max_size=options.vocab_size, specials=[PAD, BLK])
 
   # second pass: numberize
   train_data = []
   for line in codecs.open(options.train_file, 'r', 'utf8'):
-  # for line in open(options.train_file):
     tokens = line.split()
     token_ids = []
     if not options.charniak:
@@ -73,7 +73,6 @@ def main(options):
 
   dev_data = []
   for line in codecs.open(options.dev_file, 'r', 'utf8'):
-  # for line in open(options.dev_file):
     tokens = line.split()
     token_ids = []
     if not options.charniak:
@@ -87,7 +86,6 @@ def main(options):
 
   test_data = []
   for line in codecs.open(options.test_file, 'r', 'utf8'):
-  # for line in open(options.dev_file):
     tokens = line.split()
     token_ids = []
     if not options.charniak:

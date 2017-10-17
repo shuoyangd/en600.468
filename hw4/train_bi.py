@@ -18,6 +18,8 @@ logging.basicConfig(
 parser = argparse.ArgumentParser(description="Starter code for JHU CS468 Machine Translation HW4.")
 parser.add_argument("--data_file", required=True,
                     help="File for training set.")
+parser.add_argument("--model_file", required=True,
+                    help="Location to dump the models.")
 parser.add_argument("--batch_size", default=1, type=int,
                     help="Batch size for training. (default=1)")
 parser.add_argument("--epochs", default=20, type=int,
@@ -108,6 +110,7 @@ def main(options):
     if (last_dev_avg_loss - dev_avg_loss).data[0] < options.estop:
       logging.info("Early stopping triggered with threshold {0} (previous dev loss: {1}, current: {2})".format(epoch_i, last_dev_avg_loss.data[0], dev_avg_loss.data[0]))
       break
+    torch.save(rnnlm, open(options.model_file + ".nll_{0:.2f}.epoch_{1}".format(dev_avg_loss.data[0], epoch_i), 'wb'), pickle_module=dill)
     last_dev_avg_loss = dev_avg_loss
 
 
