@@ -14,6 +14,8 @@ We assume you have registered an account at [Google Cloud](cloud.google.com) and
 
 This google cloud guide will guide you through the process of creating a remote GPU host and run experiment on that.
 
+## Delete Your Instance When You Are Done!
+
 ### Enter Google Cloud Console 
 + Once you logged in your google account, if you are on [Google Cloud homepage](cloud.google.com), click on `console`.
 
@@ -55,7 +57,7 @@ By default our GPU quota is 0. You need to go through the process of manually in
 + Select the newly created image to create instance.
 + Pick a zone that has GPU, `us-east1-c` and `us-east1-d` all seem good choice, and seems like they don't have to match what you selected when you initialize `gcloud`.
 + Request 1 vCPU, 12GB memory (you need to toggle on "Extend memory")
-+ Allow HTTP and HTTPS traffic
++ Allow HTTP and HTTPS traffic, if you want to use Github
 + Scroll down, hit create
 + Wait
 + "SSH" -> View `gcloud`command
@@ -93,3 +95,8 @@ It might be a bit of a hassle to transmit data back and forth between the Google
   * You can create a bucket from Google Cloud Platform main menu (Android-style bars) -> Storage.
   * Once you created the bucket, you can transmit data following instructions [here](https://cloud.google.com/storage/docs/quickstart-gsutil#create).
 
+### Instance Deletion
+
+You can see all your instances from Main menu -> Compute Engine -> VM Instances. When you are done with your instance, make sure you **Delete** INSTEAD OF stop your instance. You'll still end up being billed for that and since the instances we use are pretty expensive, the bill could add up pretty quickly.
+
+## Delete Your Instance When You Are Done!

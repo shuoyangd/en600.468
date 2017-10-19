@@ -8,12 +8,12 @@ import logging
 import torch
 from torch import cuda
 from torch.autograd import Variable
-from example_module import RNNLM
-# from model import RNNLM
+# from example_module import RNNLM
+from model import RNNLM
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s: %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG)
+    datefmt='%Y-%m-%d %H:%M:%S', level=logging.INFO)
 
 parser = argparse.ArgumentParser(description="Starter code for JHU CS468 Machine Translation HW4.")
 parser.add_argument("--data_file", required=True,
@@ -111,10 +111,10 @@ def main(options):
     # validation -- this is a crude esitmation because there might be some paddings at the end
     dev_loss = 0.0
     for batch_i in range(len(batched_dev_in)):
-      dev_in_batch = Variable(batched_dev_in[batch_i])
-      dev_out_batch = Variable(batched_dev_out[batch_i])
-      dev_in_mask = Variable(batched_dev_in_mask[batch_i])
-      dev_out_mask = Variable(batched_dev_out_mask[batch_i])
+      dev_in_batch = Variable(batched_dev_in[batch_i], volatile=True)
+      dev_out_batch = Variable(batched_dev_out[batch_i], volatile=True)
+      dev_in_mask = Variable(batched_dev_in_mask[batch_i], volatile=True)
+      dev_out_mask = Variable(batched_dev_out_mask[batch_i], volatile=True)
       if use_cuda:
         dev_in_batch = dev_in_batch.cuda()
         dev_out_batch = dev_out_batch.cuda()
