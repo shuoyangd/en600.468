@@ -142,7 +142,7 @@ As an example, instead of implementing word embedding layer as a python dictiona
 
 As you see, a word embedding query (represented by `word_idx`) with size `(sequence_length, )` would return a result with size `(sequence_length, word_embedding)`, where each row in the result is the word embedding for the word we wish to query. Now we have formalized the word embedding layer all in terms of tensor processing.
 
-As a practice, try to figure out yourself what would be the tensor operations of simple recurrent layer and output layer (much more intuitive than embedding layer). Especially, it's helpful to know what is the input and output tensor shapes of these layers. You can always check with documents of the corresponding modules ([torch.nn.RNN](http://pytorch.org/docs/master/nn.html#torch.nn.RNN) and [torch.nn.Linear](http://pytorch.org/docs/master/nn.html#torch.nn.Linear)) to see if you get it right. 
+As a practice, try to figure out yourself what would be the tensor operations of simple recurrent layer and output layer (much more intuitive than embedding layer). Especially, it's helpful to know what is the input and output tensor shapes of these layers. For this part, you can always check with documents of the corresponding modules ([torch.nn.RNN](http://pytorch.org/docs/master/nn.html#torch.nn.RNN) and [torch.nn.Linear](http://pytorch.org/docs/master/nn.html#torch.nn.Linear)) to see if you get it right (don't do it for Part II though, as you will see later). 
 
 By the way, we used [advanced indexing](https://docs.scipy.org/doc/numpy-1.13.0/reference/arrays.indexing.html#advanced-indexing) in the code above. If you are not familiar with it, it might worth to spend some time to follow the link and figure out.
 
@@ -226,7 +226,7 @@ The way to model this probability distribution is to have two RNNs in the same n
 + The concatenation layer, which concatenates the hidden state corresponding to the same input tokens.
 + The output layer, which first performs an linear transformation on the concatenated hidden states into a vector that has the same size as the full vocabulary, and then applies [softmax function](https://en.wikipedia.org/wiki/Softmax_function) over this vector, and then a element-wise log. The resulting vector is the output of this network.
 
-**Hint on RNN Layers**: be careful how you align the output hidden states -- note that as the probability model above indicates, your hidden state for a timestep should not see the corresponding word you are trying to predict. As sanity checks: (1) if you are getting negative log likelihood below 1.0, you are doing it wrong. (2) if you implement it in the same way as `torch.nn.RNN`, you are doing it wrong. 
+**Hint on RNN Layers**: be careful how you align the output hidden states -- note that as the probability model above indicates, your hidden state for a timestep should not see the corresponding word you are trying to predict. As sanity checks: (1) if you are getting negative log likelihood below 1.0, you are doing it wrong. (2) if you implement it in the same way as [torch.nn.RNN](http://pytorch.org/docs/master/nn.html#torch.nn.RNN), you are doing it wrong. 
 
 However, the case is different in neural machine translation implementation, where the implementation schema in `torch.nn.RNN` is correct. Try to understand why it is different (not required in the writeup).
 
