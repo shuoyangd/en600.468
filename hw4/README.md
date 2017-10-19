@@ -226,7 +226,7 @@ The way to model this probability distribution is to have two RNNs in the same n
 + The concatenation layer, which concatenates the hidden state corresponding to the same input tokens.
 + The output layer, which first performs an linear transformation on the concatenated hidden states into a vector that has the same size as the full vocabulary, and then applies [softmax function](https://en.wikipedia.org/wiki/Softmax_function) over this vector, and then a element-wise log. The resulting vector is the output of this network.
 
-**Hint on RNN Layers**: be careful how you align the output hidden states -- note that as the probability model above indicates, your hidden state for a timestep should not see the corresponding word you are trying to predict. As sanity checks: (1) if you are getting negative log likelihood below 1.0, you are doing it wrong. (2) if you implement it in the same way as [torch.nn.RNN](http://pytorch.org/docs/master/nn.html#torch.nn.RNN), you are doing it wrong. 
+**Hint on RNN Layers**: be careful how you align the output hidden states for the two directions -- note that as the probability model above indicates, your hidden state for a timestep should not see the corresponding word you are trying to predict. As sanity checks: (1) if you are getting negative log likelihood below 1.0, you are doing it wrong. (2) if you implement it in the same way as [torch.nn.RNN](http://pytorch.org/docs/master/nn.html#torch.nn.RNN), you are doing it wrong. 
 
 However, the case is different in neural machine translation implementation, where the implementation schema in `torch.nn.RNN` is correct. Try to understand why it is different (not required in the writeup).
 
