@@ -10,7 +10,7 @@ active_tab: homework
 <span class="text-muted">Homework 4:</span> Multi-word Cloze 
 =============================================================
 
-Due: October 31st, 2017
+Due: November 2nd, 2017
 
 <!-- A language model predicts the probability of the next word $w_i$ given its context:
 
@@ -302,6 +302,6 @@ Ground Rules
    If you aren't sure whether something is permitted, 
    ask us. If you want to do system combination, join forces with 
    your classmates.
-*  The deadline for the leaderboard is 10-31-2017 at 11:59pm.
+*  The deadline for the leaderboard is 11-02-2017 at 11:59pm.
 
 *Credits: This assignment was mostly developed by [Shuoyang Ding](http://sding.org/). [Adi Renduchintala](https://arendu.github.io) contributed the idea of multi-word cloze and helped extensively with testing this homework.*
