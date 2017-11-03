@@ -49,32 +49,32 @@ dict_keys(['encoder.embeddings.emb_luts.0.weight', 'encoder.rnn.weight_ih_l0', '
 The file `model.param` is a Python dictionary that contains the model dump that's been trained for 7 epochs on the data provided to you. Although the keys should be self-explanatory, here is a brief description of what they are:
 
 #### word embeddings
-+ encoder.embeddings.emb_luts.0.weight torch.Size([src_vocab_size, src_word_emb_size] = [36616, 300]): the source word embedding
-+ decoder.embeddings.emb_luts.0.weight torch.Size([trg_vocab_size, trg_word_emb_size] = [23262, 300]): the target word embedding
++ `encoder.embeddings.emb_luts.0.weight` torch.Size([src_vocab_size, src_word_emb_size] = [36616, 300]): the source word embedding
++ `decoder.embeddings.emb_luts.0.weight` torch.Size([trg_vocab_size, trg_word_emb_size] = [23262, 300]): the target word embedding
 
 #### forward source encoding:
-+ encoder.rnn.weight_ih_l0 torch.Size([4 * encoder_hidden_size, src_word_emb_size] = [2048, 300]): the input connection to the gates of the LSTM, see [here](https://discuss.pytorch.org/t/lstm-gru-gate-weights/2807) for how the weights are arranged
-+ encoder.rnn.weight_hh_l0 torch.Size([4 * encoder_hidden_size, encoder_hidden_size] = [2048, 512]): the hidden connection to the gates of the LSTM, see [here](https://discuss.pytorch.org/t/lstm-gru-gate-weights/2807) for how the weights are arranged
-+ encoder.rnn.bias_ih_l0 torch.Size([4 * encoder_hidden_size] = [2048]): bias term for the input connections, same arrangement as above
-+ encoder.rnn.bias_hh_l0 torch.Size([4 * encoder_hidden_size] = [2048]): bias term for the hidden connections, same arrangement as above
++ `encoder.rnn.weight_ih_l0` torch.Size([4 * encoder_hidden_size, src_word_emb_size] = [2048, 300]): the input connection to the gates of the LSTM, see [here](https://discuss.pytorch.org/t/lstm-gru-gate-weights/2807) for how the weights are arranged
++ `encoder.rnn.weight_hh_l0` torch.Size([4 * encoder_hidden_size, encoder_hidden_size] = [2048, 512]): the hidden connection to the gates of the LSTM, see [here](https://discuss.pytorch.org/t/lstm-gru-gate-weights/2807) for how the weights are arranged
++ `encoder.rnn.bias_ih_l0` torch.Size([4 * encoder_hidden_size] = [2048]): bias term for the input connections, same arrangement as above
++ `encoder.rnn.bias_hh_l0` torch.Size([4 * encoder_hidden_size] = [2048]): bias term for the hidden connections, same arrangement as above
 
 #### backward source encoding (same thing as above):
-+ encoder.rnn.weight_ih_l0_reverse torch.Size([2048, 300])
-+ encoder.rnn.weight_hh_l0_reverse torch.Size([2048, 512])
-+ encoder.rnn.bias_ih_l0_reverse torch.Size([2048])
-+ encoder.rnn.bias_hh_l0_reverse torch.Size([2048])
++ `encoder.rnn.weight_ih_l0_reverse` torch.Size([2048, 300])
++ `encoder.rnn.weight_hh_l0_reverse` torch.Size([2048, 512])
++ `encoder.rnn.bias_ih_l0_reverse` torch.Size([2048])
++ `encoder.rnn.bias_hh_l0_reverse` torch.Size([2048])
 
 #### decoder
-+ decoder.rnn.layers.0.weight_ih torch.Size([4 * decoder_hidden_size, trg_word_emb_size + 2 * encoder_hidden_size] = [4096, 1324])
-+ decoder.rnn.layers.0.weight_hh torch.Size([4 * decoder_hidden_size, decoder_hidden_size] = [4096, 1024])
-+ decoder.rnn.layers.0.bias_ih torch.Size([4 * decoder_hidden_size] = [4096])
-+ decoder.rnn.layers.0.bias_hh torch.Size([4 * decoder_hidden_size] = [4096])
++ `decoder.rnn.layers.0.weight_ih` torch.Size([4 * decoder_hidden_size, trg_word_emb_size + 2 * encoder_hidden_size] = [4096, 1324])
++ `decoder.rnn.layers.0.weight_hh` torch.Size([4 * decoder_hidden_size, decoder_hidden_size] = [4096, 1024])
++ `decoder.rnn.layers.0.bias_ih` torch.Size([4 * decoder_hidden_size] = [4096])
++ `decoder.rnn.layers.0.bias_hh` torch.Size([4 * decoder_hidden_size] = [4096])
 
 #### attention
 The global general attention described in [(Luong et al. 2015)](https://arxiv.org/pdf/1508.04025.pdf) was used in the model. Consult [here](https://github.com/shuoyangd/OpenNMT-py/blob/en600.468/onmt/modules/GlobalAttention.py) for how the attention should exactly implemented.
 
-+ decoder.attn.linear_in.weight torch.Size([1024, 1024])
-+ decoder.attn.linear_out.weight torch.Size([1024, 2048])
++ `decoder.attn.linear_in.weight` torch.Size([1024, 1024])
++ `decoder.attn.linear_out.weight` torch.Size([1024, 2048])
 
 Cloud Guide (2017)
 --------------
@@ -116,7 +116,7 @@ Ground Rules
   1. A clear, mathematical answer for each bullet point with writeup requirements.
      This needn't be long, but it should be clear enough that one of your fellow students could re-implement it 
      exactly. If you modified your algorithm or have more than 1 algorithm, explain each modification/algorithm clearly. Give the dev scores for each modification/algorithm, and the test score for your final choice.
-*  As most of the storage is destroyed during blackout, you shouldn't access any other data than what we provide.
+*  As most of the storage media is destroyed during blackout, you shouldn't access any other data than what we provide.
    You are free to use any code or software you like, but you must write your own NMT model.
    If you want to use POS tagger, parser, or word embedding builders, that is fine. 
    But any module or program that already implement NMT models for you are off-limit.
@@ -125,4 +125,4 @@ Ground Rules
 *  The deadline for the leaderboard is 11-17-2017 at 11:59pm.
 
 
-*Credits: This assignment was developed by [Shuoyang Ding](http://sding.org/). The inspiration for the blackout idea was borrowed from the anime short [Blade Runner: Blackout 2022](https://www.youtube.com/watch?v=rrZk9sSgRyQ). 
+*Credits: This assignment was developed by [Shuoyang Ding](http://sding.org/). The idea of blackout was borrowed from the anime short [Blade Runner: Blackout 2022](https://www.youtube.com/watch?v=rrZk9sSgRyQ). 
