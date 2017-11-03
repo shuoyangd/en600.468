@@ -123,3 +123,6 @@ Ground Rules
    If you aren't sure whether something is permitted, ask us.
    If you want to do system combination, join forces with your classmates.
 *  The deadline for the leaderboard is 11-17-2017 at 11:59pm.
+
+
+*Credits: This assignment was developed by [Shuoyang Ding](http://sding.org/). The inspiration for the blackout idea was borrowed from the anime short [Blade Runner: Blackout 2022](https://www.youtube.com/watch?v=rrZk9sSgRyQ). 
