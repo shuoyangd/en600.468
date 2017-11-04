@@ -94,9 +94,6 @@ def main(options):
       loss.backward()
       optimizer.step()
 
-      if i > 5:
-        break
-
     # validation -- this is a crude esitmation because there might be some paddings at the end
     dev_loss = 0.0
     for batch_i in range(len(batched_dev_src)):
