@@ -24,7 +24,7 @@ parser.add_argument("--data_file", required=True,
                     help="Path to store the binarized data file.")
 
 UNK = "<unk>"
-PAD = "<pad>"
+PAD = "<blank>"
 
 
 def main(options):
