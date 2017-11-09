@@ -22,10 +22,13 @@ parser.add_argument("--vocab_file", required=True,
                     help="Torchtext vocab file that needs to be loaded.")
 parser.add_argument("--data_file", required=True,
                     help="Path to store the binarized data file.")
+parser.add_argument("--charniak", default=False, action='store_true',
+                    help="Append BOS and EOS as in Charniak parser format.")
 
 UNK = "<unk>"
 PAD = "<blank>"
-
+BOS = "<s>"
+EOS = "</s>"
 
 def main(options):
 
@@ -36,7 +39,7 @@ def main(options):
   if PAD not in itos:
     itos.append(PAD)
 
-  stoi = dict([ (word, id) for (id, word) in enumerate(itos) ])
+  stoi = dict([(word, id) for (id, word) in enumerate(itos)])
   vocab = torchtext.vocab.Vocab(collections.Counter({}))
   vocab.itos = itos
   vocab.stoi = stoi
@@ -46,8 +49,12 @@ def main(options):
   for line in codecs.open(options.train_file, 'r', 'utf8'):
     tokens = line.split()
     token_ids = []
+    if options.charniak:
+      token_ids.append(vocab.stoi.get(BOS))
     for token in tokens:
       token_ids.append(vocab.stoi.get(token, unk_idx))
+    if options.charniak:
+      token_ids.append(vocab.stoi.get(EOS))
     sent = torch.LongTensor(token_ids)
     train_data.append(sent)
 
@@ -55,8 +62,12 @@ def main(options):
   for line in codecs.open(options.dev_file, 'r', 'utf8'):
     tokens = line.split()
     token_ids = []
+    if options.charniak:
+      token_ids.append(vocab.stoi.get(BOS))
     for token in tokens:
       token_ids.append(vocab.stoi.get(token, unk_idx))
+    if options.charniak:
+      token_ids.append(vocab.stoi.get(EOS))
     sent = torch.LongTensor(token_ids)
     dev_data.append(sent)
 
@@ -64,8 +75,12 @@ def main(options):
   for line in codecs.open(options.test_file, 'r', 'utf8'):
     tokens = line.split()
     token_ids = []
+    if options.charniak:
+      token_ids.append(vocab.stoi.get(BOS))
     for token in tokens:
       token_ids.append(vocab.stoi.get(token, unk_idx))
+    if options.charniak:
+      token_ids.append(vocab.stoi.get(EOS))
     sent = torch.LongTensor(token_ids)
     test_data.append(sent)
 
